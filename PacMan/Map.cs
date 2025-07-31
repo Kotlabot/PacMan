@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PacMan.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,11 @@ namespace PacMan
         public double TileSizeWidth { get; private set; }
         public double TileSizeHeight { get; private set; }
         public List<GameObject> Objects { get; private set; }
-        public string[,] map;
+        public Entity[,] map;
+        public string PathToBackground { get; private set; }
+
+        public ScreenElement Background { get; private set; }
+
 
         public Map(double width, double height, double tileSizeWidth, double tileSizeHeight) 
         {
@@ -22,6 +27,8 @@ namespace PacMan
             Height = height;
             TileSizeWidth = tileSizeWidth;
             TileSizeHeight = tileSizeHeight;
+            ChangeBackgoundSource("../../../images/background.png");
+            LoadMap();  
         }
 
         private void LoadMap()
@@ -31,9 +38,16 @@ namespace PacMan
             int numberOfTilesWidth = Convert.ToInt32(Width/TileSizeWidth);
             int numberOfTilesHeight = Convert.ToInt32(Height/TileSizeHeight);
 
-            map = new string[numberOfTilesWidth, numberOfTilesHeight];
+            map = new Entity[numberOfTilesHeight, numberOfTilesWidth];
             Objects = new List<GameObject>();
         }
 
+
+        public void ChangeBackgoundSource(string userPath)
+        {
+            PathToBackground = userPath;
+            Background = new ScreenElement(Width, Height, userPath);
+            Background.LoadImage();
+        }
     }
 }

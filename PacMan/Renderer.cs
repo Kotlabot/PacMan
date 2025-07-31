@@ -13,32 +13,30 @@ namespace PacMan
     public class Renderer
     {
         Image ImageSource { get; set; }
-        ScreenElement Background {  get; set; }
-        public Renderer(Image MainScreen, string pathToBackground) 
+        public Renderer(Image MainScreen) 
         {
             ImageSource = MainScreen;
-            Background = new ScreenElement(ImageSource.Width, ImageSource.Height, pathToBackground);
-            Background.LoadImage();
         }
-        public BitmapSource Render(List<GameObject> objects)
+
+        public BitmapSource Render(Map map, List<GameObject> objects)
         {
             DrawingVisual drawingVisual = new DrawingVisual();
 
             using (DrawingContext context = drawingVisual.RenderOpen())
             {
                 // Draw background
-                if (Background.ImageSource != null)
+                if (map.Background.ImageSource != null)
                 {
                     Rect bgRect = new Rect(0, 0, ImageSource.Width, ImageSource.Height);
-                    context.DrawImage(Background.ImageSource, bgRect);
+                    context.DrawImage(map.Background.ImageSource, bgRect);
                 }
 
                 // Draw each subimage
                 foreach (var obj in objects)
                 {
-                    if(obj != null)
+                    if (obj != null)
                     {
-                        Rect targetRect = new Rect(obj.Coordinates.X, obj.Coordinates.Y, obj.Sprite.Width, obj.Sprite.Height);
+                        Rect targetRect = new Rect((map.TileSizeWidth*obj.Coordinates.X), (map.TileSizeHeight*obj.Coordinates.Y), obj.Sprite.Width, obj.Sprite.Height);
                         context.DrawImage(obj.Sprite.ImageSource, targetRect);
                     }
                 }
@@ -49,6 +47,5 @@ namespace PacMan
             finalImage.Render(drawingVisual);
             return finalImage;
         }
-
     }
 }

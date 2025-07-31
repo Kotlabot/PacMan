@@ -73,18 +73,25 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBox Grid.Row="0" Height="25" IsEnabled="False" Name="txt"/>
-            <Canvas Name="OverlayCanvas" Width="650" Height="400" RenderTransformOrigin="0.5,0.5" MouseLeftButtonDown="OverlayCanvas_MouseDown" Grid.Row="1" Background="Transparent" Visibility="Collapsed">
+            <Canvas Name="OverlayCanvas" Width="650" Height="400" RenderTransformOrigin="0.5,0.5" MouseLeftButtonDown="OverlayCanvas_InsertObjectHandler" Grid.Row="1" Background="Transparent" Visibility="Collapsed" MouseRightButtonDown="OverlayCanvas_DeleteObjectHandler">
                 <Canvas.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
                         <SkewTransform/>
                         <RotateTransform/>
-                        <TranslateTransform X="-55"/>
+                        <TranslateTransform X="-55" Y="-20"/>
                     </TransformGroup>
                 </Canvas.RenderTransform>
             </Canvas>
         </Grid>
-        <ComboBox x:Name="AddObjectsBox" Width="80" Height="50" RenderTransformOrigin="0.5,0.5">
+        <ComboBox x:Name="AddObjectsBox" Width="100" Height="25" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" SelectionChanged="AddObjectsBox_SelectionChanged">
+            <ComboBoxItem IsSelected="True" IsEnabled="False" Content="Select entity"></ComboBoxItem>
+            <ComboBoxItem Content="Wall" FontSize="14"></ComboBoxItem>
+            <ComboBoxItem Content="Cookie" FontSize="14"></ComboBoxItem>
+            <ComboBoxItem Content="Super Cookie" FontSize="14"></ComboBoxItem>
+            <ComboBoxItem Content="Monster" FontSize="14"></ComboBoxItem>
+            <ComboBoxItem Content="Super Monster" FontSize="14"></ComboBoxItem>
+            <ComboBoxItem Content="MonsterSpawn" FontSize="14"></ComboBoxItem>
             <ComboBox.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -94,5 +101,87 @@
                 </TransformGroup>
             </ComboBox.RenderTransform>
         </ComboBox>
+        <TextBox x:Name="PathToEntityImage" TextWrapping="Wrap" Text="Insert path..." Width="100" Height="25" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Foreground="#FF675E5E" FontSize="12" FontStyle="Italic">
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="-85"/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
+        <Button x:Name="QuitMapEditorButton" Content="QUIT" Width="80" Height="30" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="QuitMapEditorButton_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="160"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+        <Button x:Name="SaveMapButton" Content="SAVE" Width="80" Height="30" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="110"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+        <Label x:Name="Label1" Width="80" Height="40" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Entity image path:" TextWrapping="Wrap" TextAlignment="Center"/>
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="-120"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label x:Name="Label2" Width="80" Height="50" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5" FontSize="12">
+            <TextBlock Text="Background image path:" TextWrapping="Wrap" TextAlignment="Center"/>
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="-45"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <TextBox x:Name="PathToBackgroundImage" TextWrapping="Wrap" Text="Insert path..." Width="100" Height="25" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5" FontSize="12" FontStyle="Italic" Foreground="#FF675E5E">
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="-15"/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
+        <Button x:Name="LoadBackgroundButton" Content="LOAD" Width="40" Height="30" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5" Click="LoadBackgroundButton_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="300" Y="20"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+        <Button x:Name="DefaultBackgroundButton" Content="DEFAULT" Width="50" Height="30" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="DefaultBackgroundButton_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="20" X="355"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
     </Grid>
 </Window>

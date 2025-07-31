@@ -1,8 +1,5 @@
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\bin\Debug\net8.0-windows\PacMan.exe
-C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\bin\Debug\net8.0-windows\PacMan.deps.json
-C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\bin\Debug\net8.0-windows\PacMan.runtimeconfig.json
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\bin\Debug\net8.0-windows\PacMan.dll
-C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\bin\Debug\net8.0-windows\PacMan.pdb
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\MainWindow.g.cs
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\App.g.cs
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\PacMan_MarkupCompile.cache
@@ -13,8 +10,12 @@ C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\PacMan.AssemblyInfoInputs.cache
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\PacMan.AssemblyInfo.cs
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\PacMan.csproj.CoreCompileInputs.cache
+C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\PacMan.sourcelink.json
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\PacMan.dll
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\refint\PacMan.dll
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\PacMan.pdb
+C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\bin\Debug\net8.0-windows\PacMan.deps.json
+C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\bin\Debug\net8.0-windows\PacMan.runtimeconfig.json
+C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\bin\Debug\net8.0-windows\PacMan.pdb
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\PacMan.genruntimeconfig.cache
 C:\Users\Terezka\Desktop\Terezka\UK\CSharpPrograming\FinalProgram\Pacman\PacMan\PacMan\obj\Debug\net8.0-windows\ref\PacMan.dll
