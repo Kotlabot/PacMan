@@ -47,7 +47,7 @@ namespace PacMan
                     if (Map.map[row, col] == null)
                         continue;
 
-                    objects.Add(Map.map[row, col].GameObject);
+                    objects.Add(Map.map[row, col].gameObject);
                 }
             }
 
@@ -100,8 +100,8 @@ namespace PacMan
             var newScreenElement = new ScreenElement(Map.TileSizeWidth, Map.TileSizeHeight, newEntity.ImagePath);
             newScreenElement.LoadImage();
 
-            newEntity.GameObject = new GameObject(newScreenElement, newEntity);
-            objects.Add(newEntity.GameObject);
+            newEntity.gameObject = new GameObject(newScreenElement, newEntity);
+            objects.Add(newEntity.gameObject);
 
             var actualPosition = Map.map[row, column];
 
@@ -216,6 +216,35 @@ namespace PacMan
         private void DefaultBackgroundButton_Click(object sender, RoutedEventArgs e)
         {
             Map.ChangeBackgoundSource("../../../images/background.png");
+        }
+
+        private void SaveMapButton_Click(object sender, RoutedEventArgs e)
+        {
+            Map.SaveUserMap();
+        }
+
+        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            Map = Map.LoadUserMap();
+            if (Map != null)
+            {
+                objects.Clear();
+                foreach (var item in Map.map)
+                {
+                    if (item != null)
+                    {
+                        var newScreenElement = new ScreenElement(Map.TileSizeWidth, Map.TileSizeHeight, item.ImagePath);
+                        newScreenElement.LoadImage();
+
+                        item.gameObject = new GameObject(newScreenElement, item);
+                        objects.Add(item.gameObject);
+                    }
+                }
+                Map.ChangeBackgoundSource(Map.PathToBackground);
+            }
+            else
+                MessageBox.Show("Error in loading map.");
+            
         }
     }
 }

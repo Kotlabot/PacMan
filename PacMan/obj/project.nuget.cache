@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "bwxHmgDy1HRBcLgxh4ib3L4WwpbAhzPpI6I/Anjm89WRwRuqWoZ9YeBthPiZ/WABPHLA+dayV4f+CqNogstsMQ==",
+  "dgSpecHash": "OYq+6UVyC3mYDFTaCTrNF67l5v4edot+gf3At28rY2Rgyb1e0EWZQCtSRLaMHzOug7lLI2ju8LTuag+Gc+mgtA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Terezka\\Desktop\\Terezka\\UK\\CSharpPrograming\\FinalProgram\\Pacman\\PacMan\\PacMan\\PacMan.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\Terezka\\Desktop\\Terezka\\UK\\CSharpPrograming\\FinalProgramRecover\\PacMan\\PacMan\\PacMan.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Terezka\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }

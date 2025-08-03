@@ -27,7 +27,7 @@
                 </TransformGroup>
             </Button.RenderTransform>
         </Button>
-        <Button x:Name="LoadButton" Content="LOAD" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Visibility="Visible">
+        <Button x:Name="LoadButton" Content="LOAD" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Visibility="Visible" Click="LoadButton_Click">
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -121,7 +121,7 @@
                 </TransformGroup>
             </Button.RenderTransform>
         </Button>
-        <Button x:Name="SaveMapButton" Content="SAVE" Width="80" Height="30" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+        <Button x:Name="SaveMapButton" Content="SAVE" Width="80" Height="30" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="SaveMapButton_Click">
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
