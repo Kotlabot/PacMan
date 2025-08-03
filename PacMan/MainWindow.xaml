@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PacMan"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" KeyDown="Window_KeyDown">
     <Grid>
         <Button x:Name="StartButton" Content="START" RenderTransformOrigin="1,0.5" Margin="0,0,0,0" Width="80" Height="50" Click="StartButton_Click" Visibility="Visible">
             <Button.RenderTransform>
@@ -17,7 +17,7 @@
                 </TransformGroup>
             </Button.RenderTransform>
         </Button>
-        <Button x:Name="PauseButton" Content="PAUSE" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Visibility="Visible">
+        <Button x:Name="PauseButton" Content="PAUSE" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="PauseButton_Click">
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -47,7 +47,7 @@
                 </TransformGroup>
             </Button.RenderTransform>
         </Button>
-        <Button x:Name="QuitButton" Content="QUIT" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Visibility="Visible">
+        <Button x:Name="QuitButton" Content="QUIT" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="QuitButton_Click">
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -92,6 +92,7 @@
             <ComboBoxItem Content="Monster" FontSize="14"></ComboBoxItem>
             <ComboBoxItem Content="Super Monster" FontSize="14"></ComboBoxItem>
             <ComboBoxItem Content="MonsterSpawn" FontSize="14"></ComboBoxItem>
+            <ComboBoxItem Content="Pacman" FontSize="14"></ComboBoxItem>
             <ComboBox.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -180,6 +181,16 @@
                     <SkewTransform/>
                     <RotateTransform/>
                     <TranslateTransform Y="20" X="355"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+        <Button x:Name="RestartButton" Content="RESTART" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="-160"/>
                 </TransformGroup>
             </Button.RenderTransform>
         </Button>

@@ -24,34 +24,37 @@ namespace PacMan
     {
         public Map Map { get; set; }
         private Renderer renderer = null;
-        private List<GameObject> objects = new List<GameObject>();
         private DispatcherTimer timer = new DispatcherTimer();
+        public GameManager gameManager = new GameManager();
         public MainWindow()
         {
             InitializeComponent();
             renderer = new Renderer(MainScreen);
             Map = new Map(MainScreen.Width, MainScreen.Height, 16, 16);
 
-            timer.Interval = TimeSpan.FromMilliseconds(50);
+            timer.Interval = TimeSpan.FromMilliseconds(100);
             timer.Tick += Render;
+            timer.Tick += gameManager.Update;
             timer.Start();
         }
 
         public void Render(object sender, EventArgs e) 
         {
-            List<GameObject> objects = new List<GameObject>();
-            for (int row = 0; row < Map.map.GetLength(0); row++)
+            if(gameManager.isGameOff)
             {
-                for (int col = 0; col < Map.map.GetLength(1); col++)
+                for (int row = 0; row < Map.map.GetLength(0); row++)
                 {
-                    if (Map.map[row, col] == null)
-                        continue;
-
-                    objects.Add(Map.map[row, col].gameObject);
+                    for (int col = 0; col < Map.map.GetLength(1); col++)
+                    {
+                        if (Map.map[row, col] == null)
+                            gameManager.objects[row, col] = null;
+                        else
+                            gameManager.objects[row, col] = Map.map[row, col].gameObject;
+                    }
                 }
             }
 
-            MainScreen.Source = renderer.Render(Map, objects);
+            MainScreen.Source = renderer.Render(Map, gameManager.objects);
         }
 
         private void OverlayCanvas_InsertObjectHandler(object sender, MouseButtonEventArgs e)
@@ -90,6 +93,10 @@ namespace PacMan
                     newEntity = new MonsterSpawn();
                     break;
 
+                case "Pacman":
+                    newEntity = new Pacman();
+                    break;
+
                 default:
                     MessageBox.Show("Please select an item!");
                     return;
@@ -101,7 +108,7 @@ namespace PacMan
             newScreenElement.LoadImage();
 
             newEntity.gameObject = new GameObject(newScreenElement, newEntity);
-            objects.Add(newEntity.gameObject);
+            gameManager.objects[row, column] = newEntity.gameObject;
 
             var actualPosition = Map.map[row, column];
 
@@ -111,18 +118,15 @@ namespace PacMan
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            //var CookieElement = new ScreenElement(30, 30, "../../../images/cookie.png");
-            //CookieElement.LoadImage();
-            //var CookieCoordinates = new Coordinates() { X = 0, Y = 0 };
-            //var PacmanElement = new ScreenElement(30, 30, "../../../images/pacman.png");
-            //PacmanElement.LoadImage();
-            //var PacmanCoordinates = new Coordinates() { X = 50, Y = 50};
-            //var CookieObject = new GameObject(CookieElement, CookieCoordinates);
-            //var PacmanObject = new GameObject(PacmanElement, PacmanCoordinates);
+            gameManager.isGameOff = false;
 
-            //objects.Add(CookieObject);
-            //objects.Add(PacmanObject);
+            StartButton.Visibility = Visibility.Collapsed;
+            MapEditorButton.Visibility = Visibility.Collapsed;
+            LoadButton.Visibility = Visibility.Collapsed;
 
+            PauseButton.Visibility = Visibility.Visible;
+            QuitButton.Visibility = Visibility.Visible;
+            RestartButton.Visibility = Visibility.Visible;
         }
 
         private void MapEditorButton_Click(object sender, RoutedEventArgs e)
@@ -184,8 +188,13 @@ namespace PacMan
 
                 case 5: PathToEntityImage.Text = "../../../images/huntMode.png";
                     break;
+
                 case 6: PathToEntityImage.Text = "../../../images/flower.png"; //change to spawn
                     break;
+
+                case 7: PathToEntityImage.Text = "../../../images/pacman.png";
+                    break;
+
                 default:
                     return;
             }
@@ -228,7 +237,7 @@ namespace PacMan
             Map = Map.LoadUserMap();
             if (Map != null)
             {
-                objects.Clear();
+                ClearMap();
                 foreach (var item in Map.map)
                 {
                     if (item != null)
@@ -237,7 +246,7 @@ namespace PacMan
                         newScreenElement.LoadImage();
 
                         item.gameObject = new GameObject(newScreenElement, item);
-                        objects.Add(item.gameObject);
+                        gameManager.objects[Convert.ToInt32(item.Coordinates.Y), Convert.ToInt32(item.Coordinates.X)] = item.gameObject;
                     }
                 }
                 Map.ChangeBackgoundSource(Map.PathToBackground);
@@ -245,6 +254,47 @@ namespace PacMan
             else
                 MessageBox.Show("Error in loading map.");
             
+        }
+
+        private void ClearMap()
+        {
+            int rows = gameManager.objects.GetLength(0);
+            int columns = gameManager.objects.GetLength(1);
+
+            for(int i = 0; i < rows; i++)
+            {
+                for(int j = 0; j < columns; j++)
+                {
+                    gameManager.objects[i, j] = null;
+                }
+            }
+        }
+
+        private void QuitButton_Click(object sender, RoutedEventArgs e)
+        {
+            gameManager.isGameOff = true;
+
+            QuitButton.Visibility = Visibility.Collapsed;
+            RestartButton.Visibility = Visibility.Collapsed;
+            PauseButton.Visibility = Visibility.Collapsed;
+
+            StartButton.Visibility = Visibility.Visible;
+            MapEditorButton.Visibility = Visibility.Visible;
+            LoadButton.Visibility = Visibility.Visible;
+        }
+
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            gameManager.isGameOff = true;
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!gameManager.isGameOff)
+            {
+                gameManager.RegisterEvent(e.Key);
+                //MessageBox.Show(e.Key.ToString());
+            }
         }
     }
 }

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace PacMan.Entities
 {
-    internal class SuperMonster : Entity
+    internal class SuperMonster : Entity, IUpdateable
     {
+        public void Update() { }
     }
 }

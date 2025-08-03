@@ -17,8 +17,7 @@ namespace PacMan
         public double Height { get; set; }    
         public double TileSizeWidth { get; set; }
         public double TileSizeHeight { get; set; }
-        [JsonIgnore]
-        public List<GameObject> Objects { get; private set; }
+  
         public Entity[,] map;
         public string PathToBackground { get; set; }
         [JsonIgnore]
@@ -42,7 +41,6 @@ namespace PacMan
             int numberOfTilesHeight = Convert.ToInt32(Height/TileSizeHeight);
 
             map = new Entity[numberOfTilesHeight, numberOfTilesWidth];
-            Objects = new List<GameObject>();
         }
 
 

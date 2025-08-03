@@ -18,7 +18,7 @@ namespace PacMan
             ImageSource = MainScreen;
         }
 
-        public BitmapSource Render(Map map, List<GameObject> objects)
+        public BitmapSource Render(Map map, GameObject[,] objects)
         {
             DrawingVisual drawingVisual = new DrawingVisual();
 
