@@ -8,6 +8,7 @@ namespace PacMan.Entities
 {
     internal class Wall : Entity
     {
+        public override void Destroy() { }
 
     }
 }

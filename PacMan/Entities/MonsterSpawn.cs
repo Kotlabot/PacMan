@@ -8,6 +8,6 @@ namespace PacMan.Entities
 {
     internal class MonsterSpawn : Entity
     {
-
+        public override void Destroy() { }
     }
 }

@@ -17,6 +17,8 @@ namespace PacMan.Entities
         [JsonIgnore]
         public bool isDestroyed;
         [JsonIgnore]
-        public GameObject gameObject; 
+        public GameObject gameObject;
+
+        public abstract void Destroy();
     }
 }

@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -26,13 +27,25 @@ namespace PacMan
         private Renderer renderer = null;
         private DispatcherTimer timer = new DispatcherTimer();
         public GameManager gameManager = new GameManager();
+        //private Task GameLoop;
         public MainWindow()
         {
             InitializeComponent();
             renderer = new Renderer(MainScreen);
             Map = new Map(MainScreen.Width, MainScreen.Height, 16, 16);
 
-            timer.Interval = TimeSpan.FromMilliseconds(100);
+            //GameLoop = new Task(() =>
+            //{
+            //    while (true)
+            //    {
+            //        gameManager.Update();
+            //        Render();
+            //        Thread.Sleep(100);
+            //    }
+            //});
+
+            //GameLoop.Start();
+            timer.Interval = TimeSpan.FromMilliseconds(50);
             timer.Tick += Render;
             timer.Tick += gameManager.Update;
             timer.Start();
