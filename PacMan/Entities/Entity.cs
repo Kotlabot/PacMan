@@ -20,5 +20,6 @@ namespace PacMan.Entities
         public GameObject gameObject;
 
         public abstract void Destroy();
+        public abstract void CreateGameObject(ScreenElement screenElement);
     }
 }

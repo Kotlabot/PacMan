@@ -9,6 +9,10 @@ namespace PacMan.Entities
     internal class Wall : Entity
     {
         public override void Destroy() { }
+        public override void CreateGameObject(ScreenElement screenElement)
+        {
+            gameObject = new GameObject(screenElement, this);
+        }
 
     }
 }

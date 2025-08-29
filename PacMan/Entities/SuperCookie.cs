@@ -9,18 +9,26 @@ namespace PacMan.Entities
 {
     internal class SuperCookie : Entity
     {
-        public int Score { get; set; }
+        public int Score { get; set; } = 500;
         private GameManager manager;
 
         public SuperCookie()
         {
-            manager = GameManager.gameManager;
+            if (GameManager.instance != null)
+            {
+                manager = GameManager.instance;
+            }
+        }
+
+        public override void CreateGameObject(ScreenElement screenElement)
+        {
+            gameObject = new GameObject(screenElement, this);
         }
 
         public override void Destroy()
         {
             isDestroyed = true;
-            manager.objects[Convert.ToInt32(gameObject.Coordinates.X), Convert.ToInt32(gameObject.Coordinates.Y)] = null;
+            manager.objects[Convert.ToInt32(gameObject.Coordinates.Y), Convert.ToInt32(gameObject.Coordinates.X)] = null;
         }
     }
 }

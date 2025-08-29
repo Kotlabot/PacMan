@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PacMan.Entities
@@ -10,19 +11,36 @@ namespace PacMan.Entities
     {
         Random Random = new Random();
         private GameManager manager;
+        private int UpdateFreq = 300;
+        private int LastUpdate;
 
         public SuperMonster()
         {
-            manager = GameManager.gameManager;
-            if (manager != null)
+            if (GameManager.instance != null)
             {
-                manager.onUpdateListeners.Add(Update);
+                manager = GameManager.instance;
             }
+
+            LastUpdate = 600;
         }
+
+        public override void CreateGameObject(ScreenElement screenElement)
+        {
+            gameObject = new GameObject(screenElement, this);
+            gameObject.SetUpdateDelegate(Update);
+        }
+
         public override void Destroy() { }
 
         public void Update()
         {
+            if (LastUpdate < UpdateFreq)
+            {
+                LastUpdate += manager.UpdateRate;
+                return;
+            }
+            LastUpdate = 0;
+
             if (manager == null && gameObject == null)
                 return;
 
@@ -59,21 +77,30 @@ namespace PacMan.Entities
             {
                 case Pacman pacman:
                     pacman.Destroy();
-                    break;
+                    return false;
+
+                case Monster monster:
+                    //manager.maskedObjects.Add(monster.gameObject);
+                    //break;
+                    return false;
 
                 case SuperMonster superMonster:
-                    break;
+                    //manager.maskedObjects.Add(superMonster.gameObject);
+                    //break;
+                    return false;
 
                 case Cookie cookie:
+                    manager.maskedObjects.Add(cookie.gameObject);
                     break;
 
                 case SuperCookie superCookie:
+                    manager.maskedObjects.Add(superCookie.gameObject);
                     break;
 
                 case Wall wall:
-                    break;
+                    return false;
             }
-            return false;
+            return true;
         }
 
     }

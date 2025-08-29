@@ -12,24 +12,39 @@ namespace PacMan.Entities
     {
         Random Random = new Random();
         private GameManager manager;
+        private int UpdateFreq = 120;
+        private int LastUpdate;
 
         public Monster()
         {
-            manager = GameManager.gameManager;
-            if (manager != null)
+            if (GameManager.instance != null)
             {
-                manager.onUpdateListeners.Add(Update);
+                manager = GameManager.instance;
             }
+
+            LastUpdate = 600;
+        }
+        public override void CreateGameObject(ScreenElement screenElement)
+        {
+            gameObject = new GameObject(screenElement, this);
+            gameObject.SetUpdateDelegate(Update);
         }
 
         public override void Destroy()
         {
             isDestroyed = true;
-            manager.onUpdateListeners.Remove(Update);
-            manager.objects[Convert.ToInt32(gameObject.Coordinates.X), Convert.ToInt32(gameObject.Coordinates.Y)] = null;
+            manager.toBeRemovedListeners.Remove(Update);
+            manager.objects[Convert.ToInt32(gameObject.Coordinates.Y), Convert.ToInt32(gameObject.Coordinates.X)] = null;
         }
         public void Update()
         {
+            if (LastUpdate < UpdateFreq)
+            {
+                LastUpdate += manager.UpdateRate;
+                return;
+            }
+            LastUpdate = 0;
+
             if (manager == null && gameObject == null)
                 return;
 
@@ -65,28 +80,38 @@ namespace PacMan.Entities
             switch (entity)
             {
                 case Pacman pacman:
-                    if (pacman.SuperMode)
+                    if (manager.isSuperMode)
                     {
                         Destroy();
-                        return true;
+                        break;
                     }
                     else
                         pacman.Destroy();
-                    break;
+                    return false;
+
+                case Monster monster:
+                    // Prehldenejsi, neprekryvaji se... TODO: zvazit
+                    //manager.maskedObjects.Add(monster.gameObject);
+                    //break;
+                    return false;
 
                 case SuperMonster superMonster:
-                    break;
+                    //manager.maskedObjects.Add(superMonster.gameObject);
+                    //break;
+                    return false;
 
                 case Cookie cookie:
+                    manager.maskedObjects.Add(cookie.gameObject);
                     break;
 
                 case SuperCookie superCookie:
+                    manager.maskedObjects.Add(superCookie.gameObject);
                     break;
 
                 case Wall wall:
-                    break;
+                    return false;
             }
-            return false;
+            return true;
         }
 
 

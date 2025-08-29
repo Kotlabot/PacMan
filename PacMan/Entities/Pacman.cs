@@ -13,27 +13,43 @@ namespace PacMan.Entities
     internal class Pacman : Entity, IUpdateable
     {
         public int Score { get; set; }
-        public bool SuperMode { get; set; }
+        private int HunterModeDuration { get; set; } = 5000;
+        private int hunterModeTimeLeft = 0;
         private GameManager manager;
 
-        public Pacman()
+        public Pacman() 
         {
-            manager = GameManager.gameManager;
-            if (manager != null)
-            {
-                manager.onUpdateListeners.Add(Update);
-            }
+            if(GameManager.instance != null)
+                manager = GameManager.instance;
+        }
+
+        public override void CreateGameObject(ScreenElement screenElement)
+        {
+            gameObject = new GameObject(screenElement, this);
+            gameObject.SetUpdateDelegate(Update);
         }
 
         public override void Destroy()
         {
             isDestroyed = true;
-            manager.onUpdateListeners.Remove(Update);
+            manager.toBeRemovedListeners.Remove(Update);
             manager.isGameOff = true;
-            MessageBox.Show("Game Over! Your score is {0}", Score.ToString());
+            MessageBox.Show($"Game Over! Your score is {Score}.", "Score");
         }
+
+        
         public void Update()
         {
+            if(hunterModeTimeLeft > HunterModeDuration)
+            {
+                hunterModeTimeLeft = 0;
+                manager.isSuperMode = false;
+            }
+            else if(manager.isSuperMode)
+            {
+                hunterModeTimeLeft += manager.UpdateRate;
+            }
+
             if (manager == null && gameObject == null)
                 return;
 
@@ -79,17 +95,22 @@ namespace PacMan.Entities
                     gameObject.Coordinates.Y += deltaY;
                     gameObject.Coordinates.X += deltaX;
                 }
+
+                if (manager.CookiesCount == manager.EatenCookies)
+                    manager.SuccesfullyEndGame(Score);
             }
 
 
         }
 
+        // Genericka metoda nebyla treba implementovat protoze problem s ruznymi druhy entit (pacman, susenka, prisera...)
+        // je vyresen abstraktni tridou Entity, kterou vsechny ostatni dedi.
         public bool HandleCollision(Entity entity)
         {
             switch (entity)
             {
                 case Monster monster:
-                    if (SuperMode)
+                    if (manager.isSuperMode)
                     {
                         monster.Destroy();
                         return true;
@@ -102,14 +123,18 @@ namespace PacMan.Entities
                     Destroy();
                     break;
 
-                case Cookie cookie:
+                case Cookie cookie:                    
                     Score += cookie.Score;
+                    manager.EatenCookies++;
                     cookie.Destroy();
                     return true;
 
                 case SuperCookie superCookie:
+                    manager.isSuperMode = true;
                     Score += superCookie.Score;
+                    manager.EatenCookies++;
                     superCookie.Destroy();
+                    hunterModeTimeLeft = 0;
                     return true;
 
                 case Wall wall:

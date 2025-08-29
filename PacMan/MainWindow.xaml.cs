@@ -1,17 +1,10 @@
 ﻿using PacMan.Entities;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace PacMan
@@ -25,35 +18,43 @@ namespace PacMan
     {
         public Map Map { get; set; }
         private Renderer renderer = null;
-        private DispatcherTimer timer = new DispatcherTimer();
-        public GameManager gameManager = new GameManager();
-        //private Task GameLoop;
+        public GameManager gameManager = new GameManager(50);
+        private Stopwatch gameUpdateWatch = Stopwatch.StartNew();
+        private Stopwatch animationWatch = Stopwatch.StartNew();
+
+        private Queue<string> pathToMaps = new Queue<string>();
+
         public MainWindow()
         {
             InitializeComponent();
             renderer = new Renderer(MainScreen);
             Map = new Map(MainScreen.Width, MainScreen.Height, 16, 16);
 
-            //GameLoop = new Task(() =>
-            //{
-            //    while (true)
-            //    {
-            //        gameManager.Update();
-            //        Render();
-            //        Thread.Sleep(100);
-            //    }
-            //});
-
-            //GameLoop.Start();
-            timer.Interval = TimeSpan.FromMilliseconds(50);
-            timer.Tick += Render;
-            timer.Tick += gameManager.Update;
-            timer.Start();
+            gameUpdateWatch.Start();
+            animationWatch.Start();
+            CompositionTarget.Rendering += UpadeUI;
         }
 
-        public void Render(object sender, EventArgs e) 
+        public void UpadeUI(object sender, EventArgs e)
         {
-            if(gameManager.isGameOff)
+            if (gameManager.isGameWon)
+            {
+                if(pathToMaps.Count == 0) 
+                {
+                    MessageBox.Show("All levels won!");
+                    gameManager.isGameWon = false;
+                    return;
+                }
+
+                var newMap = Map.LoadUserMap(pathToMaps.Dequeue());
+                if (newMap != null)
+                {
+                    LoadMap(newMap);
+                }
+                gameManager.isGameWon = false;
+            }
+
+            if (gameManager.isGameOff)
             {
                 for (int row = 0; row < Map.map.GetLength(0); row++)
                 {
@@ -68,6 +69,17 @@ namespace PacMan
             }
 
             MainScreen.Source = renderer.Render(Map, gameManager.objects);
+            if (gameUpdateWatch.ElapsedTicks > 350000)
+            {
+                gameManager.Update(sender, e);
+                gameUpdateWatch.Restart();
+            }
+
+            if (animationWatch.ElapsedTicks > 2000000)
+            {
+                gameManager.UpdateAnimations();
+                animationWatch.Restart();
+            }
         }
 
         private void OverlayCanvas_InsertObjectHandler(object sender, MouseButtonEventArgs e)
@@ -90,20 +102,16 @@ namespace PacMan
                     newEntity = new Cookie();
                     break;
 
-                case "SuperCookie":
+                case "Super Cookie":
                     newEntity = new SuperCookie();
                     break;
 
-                case "Monster": 
+                case "Monster":
                     newEntity = new Monster();
                     break;
 
-                case "SuperMonster":
+                case "Super Monster":
                     newEntity = new SuperMonster();
-                    break;
-
-                case "MonsterSpawn": 
-                    newEntity = new MonsterSpawn();
                     break;
 
                 case "Pacman":
@@ -115,12 +123,13 @@ namespace PacMan
                     return;
             }
 
+            // TODO: Predelat tak aby se nevytvarel screenelement pro kazdou entitu ale nebyly duplicitni
             newEntity.Coordinates = new Coordinates() { X = column, Y = row };
             newEntity.ImagePath = PathToEntityImage.Text;
             var newScreenElement = new ScreenElement(Map.TileSizeWidth, Map.TileSizeHeight, newEntity.ImagePath);
             newScreenElement.LoadImage();
 
-            newEntity.gameObject = new GameObject(newScreenElement, newEntity);
+            newEntity.CreateGameObject(newScreenElement);
             gameManager.objects[row, column] = newEntity.gameObject;
 
             var actualPosition = Map.map[row, column];
@@ -131,15 +140,21 @@ namespace PacMan
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            RestartButton_Click(sender, e);
             gameManager.isGameOff = false;
 
             StartButton.Visibility = Visibility.Collapsed;
             MapEditorButton.Visibility = Visibility.Collapsed;
             LoadButton.Visibility = Visibility.Collapsed;
+            StartLabel.Visibility = Visibility.Collapsed;
+            LoadLabel.Visibility = Visibility.Collapsed;
+            MapEditorLabel.Visibility = Visibility.Collapsed;
 
             PauseButton.Visibility = Visibility.Visible;
             QuitButton.Visibility = Visibility.Visible;
             RestartButton.Visibility = Visibility.Visible;
+            QuitLabel.Visibility = Visibility.Visible;
+            RestartLabel.Visibility = Visibility.Visible;
         }
 
         private void MapEditorButton_Click(object sender, RoutedEventArgs e)
@@ -149,6 +164,10 @@ namespace PacMan
             LoadButton.Visibility = Visibility.Collapsed;
             QuitButton.Visibility = Visibility.Collapsed;
             MapEditorButton.Visibility = Visibility.Collapsed;
+            StartLabel.Visibility = Visibility.Collapsed;
+            LoadLabel.Visibility = Visibility.Collapsed;
+            MapEditorLabel.Visibility = Visibility.Collapsed;
+            
 
             OverlayCanvas.Visibility = Visibility.Visible;
             AddObjectsBox.Visibility = Visibility.Visible;
@@ -160,6 +179,7 @@ namespace PacMan
             Label2.Visibility = Visibility.Visible;
             PathToBackgroundImage.Visibility = Visibility.Visible;
             DefaultBackgroundButton.Visibility = Visibility.Visible;
+            ClearMapButton.Visibility = Visibility.Visible;
         }
 
         private void QuitMapEditorButton_Click(object sender, RoutedEventArgs e)
@@ -168,44 +188,48 @@ namespace PacMan
             AddObjectsBox.Visibility = Visibility.Collapsed;
             QuitMapEditorButton.Visibility = Visibility.Collapsed;
             SaveMapButton.Visibility = Visibility.Collapsed;
-            Label1.Visibility= Visibility.Collapsed;
+            Label1.Visibility = Visibility.Collapsed;
             PathToEntityImage.Visibility = Visibility.Collapsed;
-            Label2.Visibility= Visibility.Collapsed;
+            Label2.Visibility = Visibility.Collapsed;
             PathToBackgroundImage.Visibility = Visibility.Collapsed;
-            LoadBackgroundButton.Visibility= Visibility.Collapsed;
+            LoadBackgroundButton.Visibility = Visibility.Collapsed;
             DefaultBackgroundButton.Visibility = Visibility.Collapsed;
+            ClearMapButton.Visibility = Visibility.Collapsed;
 
             StartButton.Visibility = Visibility.Visible;
-            PauseButton.Visibility = Visibility.Visible;
             LoadButton.Visibility = Visibility.Visible;
-            QuitButton.Visibility = Visibility.Visible;
             MapEditorButton.Visibility = Visibility.Visible;
+            StartLabel.Visibility = Visibility.Visible;
+            LoadLabel.Visibility = Visibility.Visible;
+            MapEditorLabel.Visibility = Visibility.Visible;
         }
 
         private void AddObjectsBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch(AddObjectsBox.SelectedIndex)
+            switch (AddObjectsBox.SelectedIndex)
             {
-                case 1: 
-                    PathToEntityImage.Text = "../../../images/wall.png";
+                case 1:
+                    PathToEntityImage.Text = "../../../images/wallOrange.png";
                     break;
 
-                case 2: PathToEntityImage.Text = "../../../images/cookie.png";
+                case 2:
+                    PathToEntityImage.Text = "../../../images/cookie.png";
                     break;
 
-                case 3: PathToEntityImage.Text = "../../../images/flower.png"; //change to supercookie
+                case 3:
+                    PathToEntityImage.Text = "../../../images/superCookie.png";
                     break;
 
-                case 4: PathToEntityImage.Text = "../../../images/monsters.png"; 
+                case 4:
+                    PathToEntityImage.Text = "../../../images/monster"; 
                     break;
 
-                case 5: PathToEntityImage.Text = "../../../images/huntMode.png";
+                case 5:
+                    PathToEntityImage.Text = "../../../images/superMonster";
                     break;
 
-                case 6: PathToEntityImage.Text = "../../../images/flower.png"; //change to spawn
-                    break;
-
-                case 7: PathToEntityImage.Text = "../../../images/pacman.png";
+                case 6:
+                    PathToEntityImage.Text = "../../../images/pacman";
                     break;
 
                 default:
@@ -247,36 +271,52 @@ namespace PacMan
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
-            Map = Map.LoadUserMap();
-            if (Map != null)
+            var newMap = Map.LoadUserMap();
+            if (newMap != null)
             {
-                ClearMap();
-                foreach (var item in Map.map)
-                {
-                    if (item != null)
-                    {
-                        var newScreenElement = new ScreenElement(Map.TileSizeWidth, Map.TileSizeHeight, item.ImagePath);
-                        newScreenElement.LoadImage();
-
-                        item.gameObject = new GameObject(newScreenElement, item);
-                        gameManager.objects[Convert.ToInt32(item.Coordinates.Y), Convert.ToInt32(item.Coordinates.X)] = item.gameObject;
-                    }
-                }
-                Map.ChangeBackgoundSource(Map.PathToBackground);
+                LoadMap(newMap);
+                LoadJsonLevels();
             }
             else
                 MessageBox.Show("Error in loading map.");
-            
         }
 
+        private void LoadMap(Map map)
+        {
+            var mapFolder = Map.PathToMap;
+            Map = map;
+            Map.PathToMap = mapFolder;
+         
+            ClearMap();
+            GameManager.instance.Reset();
+
+            foreach (var item in Map.map)
+            {
+                if (item != null)
+                {
+                    var newScreenElement = new ScreenElement(Map.TileSizeWidth, Map.TileSizeHeight, item.ImagePath);
+                    if (!newScreenElement.LoadImage())
+                    {
+                        MessageBox.Show("Error in loading image.");
+                        return;
+                    }
+
+                    item.CreateGameObject(newScreenElement);
+                    gameManager.objects[Convert.ToInt32(item.Coordinates.Y), Convert.ToInt32(item.Coordinates.X)] = item.gameObject;
+                }
+            }
+            Map.ChangeBackgoundSource(Map.PathToBackground);
+        }
+
+        //TODO: Opravit, odstranuje pouze dynamicke objekty
         private void ClearMap()
         {
             int rows = gameManager.objects.GetLength(0);
             int columns = gameManager.objects.GetLength(1);
 
-            for(int i = 0; i < rows; i++)
+            for (int i = 0; i < rows; i++)
             {
-                for(int j = 0; j < columns; j++)
+                for (int j = 0; j < columns; j++)
                 {
                     gameManager.objects[i, j] = null;
                 }
@@ -285,29 +325,107 @@ namespace PacMan
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
         {
+            RestartButton_Click(sender, e);
             gameManager.isGameOff = true;
 
             QuitButton.Visibility = Visibility.Collapsed;
             RestartButton.Visibility = Visibility.Collapsed;
             PauseButton.Visibility = Visibility.Collapsed;
+            QuitLabel.Visibility = Visibility.Collapsed;
+            RestartLabel.Visibility = Visibility.Collapsed;
 
             StartButton.Visibility = Visibility.Visible;
             MapEditorButton.Visibility = Visibility.Visible;
             LoadButton.Visibility = Visibility.Visible;
+            StartLabel.Visibility = Visibility.Visible;
+            LoadLabel.Visibility = Visibility.Visible;
+            MapEditorLabel.Visibility = Visibility.Visible;
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
-            gameManager.isGameOff = true;
+            if (gameManager.isGamePaused)
+            {
+                gameManager.isGamePaused = false;
+                PauseButton.Content = "PAUSE";
+            }
+            else
+            {
+                gameManager.isGamePaused = true;
+                PauseButton.Content = "RESUME";
+            }
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!gameManager.isGameOff)
+            if (!gameManager.isGameOff && !gameManager.isGamePaused)
             {
                 gameManager.RegisterEvent(e.Key);
-                //MessageBox.Show(e.Key.ToString());
             }
+        }
+
+        private void RestartButton_Click(object sender, RoutedEventArgs e)
+        {
+            gameManager.isGameOff = true;
+            gameManager.Reset();
+            ResetMap();
+            UpadeUI(sender, e);
+            CountCookies();
+            gameManager.isGameOff = false;
+
+        }
+
+        private void CountCookies()
+        {
+            gameManager.CookiesCount = 0;
+            gameManager.EatenCookies = 0;
+            foreach (var entity in gameManager.objects)
+            {
+                if (entity != null && entity.Entity is Cookie or SuperCookie)
+                {
+                    gameManager.CookiesCount++;
+                }
+            }
+        }
+
+
+        public void ResetMap()
+        {
+            for (int row = 0; row < Map.map.GetLength(0); row++)
+            {
+                for (int col = 0; col < Map.map.GetLength(1); col++)
+                {
+                    if (Map.map[row, col] != null)
+                    {
+                        Map.map[row, col].CreateGameObject(Map.map[row, col].gameObject.Sprite);
+                    }
+                }
+            }
+        }
+
+        private void ClearMapButton_Click(object sender, RoutedEventArgs e)
+        {
+            ClearMap();
+            Map = new Map(MainScreen.Width, MainScreen.Height, 16, 16);
+        }
+
+        public void LoadJsonLevels()
+        {
+            if (string.IsNullOrWhiteSpace(Map.PathToMap) || !File.Exists(Map.PathToMap))
+                return; 
+
+            var folderPath = Path.GetDirectoryName(Map.PathToMap);
+            if (string.IsNullOrWhiteSpace(folderPath) || !Directory.Exists(folderPath))
+                return;
+
+            string currentFileName = Path.GetFileName(Map.PathToMap);
+
+            var maps = Directory.GetFiles(folderPath, "*.json")
+                .Where(f => !string.Equals(Path.GetFileName(f), currentFileName, StringComparison.OrdinalIgnoreCase)) // vyrazeni soucasne cesty
+                .OrderBy(f => Path.GetFileNameWithoutExtension(f))
+                .ToList();
+
+            pathToMaps = new Queue<string>(maps);
         }
     }
 }

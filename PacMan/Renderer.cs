@@ -13,6 +13,7 @@ namespace PacMan
     public class Renderer
     {
         Image ImageSource { get; set; }
+        private Color Color { get; set; } = Color.FromRgb(128, 128, 128);
         public Renderer(Image MainScreen) 
         {
             ImageSource = MainScreen;
@@ -24,14 +25,14 @@ namespace PacMan
 
             using (DrawingContext context = drawingVisual.RenderOpen())
             {
-                // Draw background
+                // Vykresleni pozadi
                 if (map.Background.ImageSource != null)
                 {
                     Rect bgRect = new Rect(0, 0, ImageSource.Width, ImageSource.Height);
                     context.DrawImage(map.Background.ImageSource, bgRect);
                 }
 
-                // Draw each subimage
+                // Vykresleni vsech game objektu
                 foreach (var obj in objects)
                 {
                     if (obj != null)
@@ -39,6 +40,17 @@ namespace PacMan
                         Rect targetRect = new Rect((map.TileSizeWidth*obj.Coordinates.X), (map.TileSizeHeight*obj.Coordinates.Y), obj.Sprite.Width, obj.Sprite.Height);
                         context.DrawImage(obj.Sprite.ImageSource, targetRect);
                     }
+                }
+
+                if (GameManager.instance.isSuperMode)
+                {
+                    Rect overlayRect = new Rect(0, 0, ImageSource.Width, ImageSource.Height);
+                    SolidColorBrush overlayBrush = new SolidColorBrush(Color)
+                    {
+                        Opacity = 0.3
+                    };
+
+                    context.DrawRectangle(overlayBrush, null, overlayRect);
                 }
             }
 

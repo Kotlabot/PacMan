@@ -14,31 +14,34 @@ namespace PacMan
     public class Map
     {
         public double Width { get; set; }
-        public double Height { get; set; }    
+        public double Height { get; set; }
         public double TileSizeWidth { get; set; }
         public double TileSizeHeight { get; set; }
-  
+
         public Entity[,] map;
         public string PathToBackground { get; set; }
+
+        [JsonIgnore]
+        public string PathToMap { get; set; }
         [JsonIgnore]
         public ScreenElement Background { get; private set; }
 
-        public Map(double width, double height, double tileSizeWidth, double tileSizeHeight) 
+        public Map(double width, double height, double tileSizeWidth, double tileSizeHeight)
         {
             Width = width;
             Height = height;
             TileSizeWidth = tileSizeWidth;
             TileSizeHeight = tileSizeHeight;
             ChangeBackgoundSource("../../../images/background.png");
-            LoadMap();  
+            LoadMap();
         }
 
         private void LoadMap()
         {
-            double offsetWidth = (Width % TileSizeWidth)/2;
-            double offsetHeight = (Height % TileSizeHeight)/2;
-            int numberOfTilesWidth = Convert.ToInt32(Width/TileSizeWidth);
-            int numberOfTilesHeight = Convert.ToInt32(Height/TileSizeHeight);
+            double offsetWidth = (Width % TileSizeWidth) / 2;
+            double offsetHeight = (Height % TileSizeHeight) / 2;
+            int numberOfTilesWidth = Convert.ToInt32(Width / TileSizeWidth);
+            int numberOfTilesHeight = Convert.ToInt32(Height / TileSizeHeight);
 
             map = new Entity[numberOfTilesHeight, numberOfTilesWidth];
         }
@@ -47,8 +50,11 @@ namespace PacMan
         public void ChangeBackgoundSource(string userPath)
         {
             PathToBackground = userPath;
-            Background = new ScreenElement(Width, Height, userPath);
-            Background.LoadImage();
+            var background = new ScreenElement(Width, Height, userPath);
+            if (background.LoadImage())
+            {
+                Background = background;
+            }
         }
 
         public void SaveUserMap()
@@ -93,18 +99,38 @@ namespace PacMan
 
             if (dialog.ShowDialog() == true)
             {
-                string jsonMap = File.ReadAllText(dialog.FileName);
+                PathToMap = dialog.FileName;
+                string jsonMap = File.ReadAllText(PathToMap);
                 var settings = new JsonSerializerSettings
                 {
-                    //NullValueHandling = NullValueHandling.Include,
-                    //DefaultValueHandling = DefaultValueHandling.Include,
-                    //ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                     TypeNameHandling = TypeNameHandling.Auto,
                     TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
                 };
+                try
+                {
+                    return JsonConvert.DeserializeObject<Map>(jsonMap, settings);
+                }
+                catch
+                {
+                    PathToMap = "";
+                }
+            }
+            return null;
+        }
 
+        public Map LoadUserMap(string path)
+        {
+            string jsonMap = File.ReadAllText(path);
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
+            };
+            try
+            {
                 return JsonConvert.DeserializeObject<Map>(jsonMap, settings);
             }
+            catch { }
             return null;
         }
     }
