@@ -10,10 +10,19 @@ using System.Windows.Media.Imaging;
 
 namespace PacMan
 {
+    /// <summary>
+    /// Represents a visual screen element for game objects. Can load a single image or multiple images (animation frames).
+    /// </summary>
     public class ScreenElement
     {
+        // Width and height of an image (in pixels).
         public double Width { get; private set; }
         public double Height { get; private set; }
+
+        // Backing field for ImageSource.
+        private BitmapImage? imageSource;
+
+        // The current image to render (one image or one frame of an animation).
         public BitmapImage? ImageSource
         {
             get
@@ -26,10 +35,14 @@ namespace PacMan
                 imageSource = value;
             }
         }
-        public string PathToSource { get; set; } = string.Empty; // private setter!!!
+
+        // Path to the image or animation directory.
+        public string PathToSource { get; set; } = string.Empty;
+
+        // Holds frames for an animation if the source is a folder.
         public List<BitmapImage> animation = new List<BitmapImage>();
 
-        private BitmapImage? imageSource;
+        // Counter to keep track of which animation frame is currently active.
         private int frameCounter;
 
         public ScreenElement(double x, double y, string path)
@@ -39,8 +52,12 @@ namespace PacMan
             PathToSource = path;
         }
 
+        /// <summary>
+        /// Loads the image or animation frames from PathToSource.
+        /// </summary>
         public bool LoadImage()
         {
+            // If the path points to a single image file, create a BitmapImage and set the path from which to load the image.
             if (File.Exists(PathToSource))
             {
                 imageSource = new BitmapImage();
@@ -49,6 +66,8 @@ namespace PacMan
                 imageSource.EndInit();
 
             }
+            // If the path points to a directory containing multiple image files,
+            // load each image file as a BitmapImage and add it to animation frames.
             else if (Directory.Exists(PathToSource))
             {
                 animation = Directory.GetFiles(PathToSource, "*.*")
@@ -72,6 +91,10 @@ namespace PacMan
             return true;
         }
 
+        /// <summary>
+        /// Updates the currently displayed frame if this is an animated element.
+        /// Increases the frame counter, loops back to the start when reaching the end.
+        /// </summary>
         public void UpdateAnimation()
         {
             if (animation.Count > 0)
