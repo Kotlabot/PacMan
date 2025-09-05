@@ -1,0 +1,518 @@
+﻿<Window x:Class="PacMan.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PacMan"
+        mc:Ignorable="d"
+        Title="Pacman" Height="450" Width="800">
+    <Grid>
+        <Button x:Name="StartButton" Content="START" RenderTransformOrigin="1,0.5" Margin="0,0,0,0" Width="80" Height="50" Click="StartButton_Click" Visibility="Visible" FontSize="14" FontFamily="Arial Black">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="0.359"/>
+                    <TranslateTransform X="330" Y="-100"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="BlueViolet" BorderBrush="DarkViolet" BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      TextElement.FontWeight="Bold"
+                      TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button x:Name="PauseButton" Content="PAUSE" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="PauseButton_Click" FontSize="14" FontFamily="Arial Black">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="0"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                    CornerRadius="10"
+                    Background="BlueViolet"
+                    BorderBrush="DarkViolet"
+                    BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  TextElement.FontWeight="Bold"
+                                  TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button x:Name="LoadButton" Content="LOAD" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Visibility="Visible" Click="LoadButton_Click" FontSize="14" FontFamily="Arial Black">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="20"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+        CornerRadius="10"
+        Background="BlueViolet"
+        BorderBrush="DarkViolet"
+        BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      TextElement.FontWeight="Bold"
+                      TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button x:Name="MapEditorButton" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Click="MapEditorButton_Click" Visibility="Visible">
+            <TextBlock Text="MAP EDITOR" TextWrapping="Wrap" TextAlignment="Center" FontSize="14" FontWeight="Bold" FontFamily="Arial Black" Foreground="White"/>
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="170"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="BlueViolet" BorderBrush="DarkViolet" BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      TextElement.FontWeight="Bold"
+                      TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button x:Name="QuitButton" Content="QUIT" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="QuitButton_Click" FontSize="14" FontFamily="Arial Black">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="160"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="BlueViolet" BorderBrush="DarkViolet" BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      TextElement.FontWeight="Bold"
+                      TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Image x:Name="MainScreen" Height="400" Width="650" RenderTransformOrigin="0.5,0.5" Visibility="Visible">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="-55"/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Height="25" IsEnabled="False" Name="txt"/>
+            <Canvas Name="OverlayCanvas" Width="650" Height="400" RenderTransformOrigin="0.5,0.5" MouseLeftButtonDown="OverlayCanvas_InsertObjectHandler" Grid.Row="1" Background="Transparent" Visibility="Collapsed" MouseRightButtonDown="OverlayCanvas_DeleteObjectHandler">
+                <Canvas.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform X="-55" Y="-20"/>
+                    </TransformGroup>
+                </Canvas.RenderTransform>
+            </Canvas>
+        </Grid>
+        <ComboBox x:Name="AddObjectsBox" Width="105" Height="25" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" SelectionChanged="AddObjectsBox_SelectionChanged">
+            <ComboBoxItem IsSelected="True" IsEnabled="False" Content="Select entity"/>
+            <ComboBoxItem Content="Wall" FontSize="14"/>
+            <ComboBoxItem Content="Cookie" FontSize="14"/>
+            <ComboBoxItem Content="Super Cookie" FontSize="14"/>
+            <ComboBoxItem Content="Monster" FontSize="14"/>
+            <ComboBoxItem Content="Super Monster" FontSize="14"/>
+            <ComboBoxItem Content="Pacman" FontSize="14"/>
+            <ComboBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="-160"/>
+                </TransformGroup>
+            </ComboBox.RenderTransform>
+        </ComboBox>
+        <TextBox x:Name="PathToEntityImage" TextWrapping="Wrap" Text="Insert path..." Width="100" Height="25" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Foreground="#FF675E5E" FontSize="12" FontStyle="Italic">
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="-55"/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
+        <Button x:Name="QuitMapEditorButton" Content="QUIT" Width="80" Height="30" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="QuitMapEditorButton_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="180"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="BlueViolet" BorderBrush="DarkViolet" BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            TextElement.FontWeight="Bold"
+                            TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button x:Name="SaveMapButton" Content="SAVE" Width="80" Height="30" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="SaveMapButton_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="140"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="BlueViolet" BorderBrush="DarkViolet" BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            TextElement.FontWeight="Bold"
+                            TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Label x:Name="Label1" Width="80" Height="40" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Entity image path:" TextWrapping="Wrap" TextAlignment="Center"/>
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="-90"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label x:Name="Label2" Width="80" Height="50" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5" FontSize="12">
+            <TextBlock Text="Background image path:" TextWrapping="Wrap" TextAlignment="Center"/>
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="-15"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <TextBox x:Name="PathToBackgroundImage" TextWrapping="Wrap" Text="Insert path..." Width="100" Height="25" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5" FontSize="12" FontStyle="Italic" Foreground="#FF675E5E">
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="20"/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
+        <Button x:Name="LoadBackgroundButton" Content="LOAD" Width="40" Height="30" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5" Click="LoadBackgroundButton_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="300" Y="60"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="BlueViolet" BorderBrush="DarkViolet" BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextElement.FontWeight="Bold"
+                        TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button x:Name="DefaultBackgroundButton" Content="DEFAULT" Width="60" Height="30" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="DefaultBackgroundButton_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="60" X="355"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="BlueViolet" BorderBrush="DarkViolet" BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextElement.FontWeight="Bold"
+                        TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button x:Name="RestartButton" Content="RESTART" Width="80" Height="50" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" FontSize="14" FontFamily="Arial Black" Click="RestartButton_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="-70"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="BlueViolet" BorderBrush="DarkViolet" BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          TextElement.FontWeight="Bold"
+          TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button x:Name="ClearMapButton" Content="CLEAR" Width="80" Height="30" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="ClearMapButton_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="330" Y="100"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="BlueViolet" BorderBrush="DarkViolet" BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            TextElement.FontWeight="Bold"
+                            TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Label x:Name="StartLabel" RenderTransformOrigin="0.5,0.5" Width="80" Height="60">
+            <TextBlock Text="To start the game press &quot;START&quot;" TextWrapping="Wrap" TextAlignment="Center"/>
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="335" Y="-155"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label x:Name="LoadLabel" Width="80" Height="60" RenderTransformOrigin="0.5,0.5">
+            <TextBlock Text="To load any map press &quot;LOAD&quot;" TextWrapping="Wrap" TextAlignment="Center"/>
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="335" Y="-35"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label x:Name="MapEditorLabel" Width="80" Height="90" RenderTransformOrigin="0.5,0.5">
+            <TextBlock Text="To create your own maps press &quot;MAP EDITOR&quot;" TextWrapping="Wrap" TextAlignment="Center"/>
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="335" Y="100"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label x:Name="QuitLabel" Width="80" Height="60" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+            <TextBlock Text="To exit to the main menu press &quot;QUIT&quot;" TextWrapping="Wrap" TextAlignment="Center"/>
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="335" Y="100"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label x:Name="RestartLabel" Width="80" Height="80" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+            <TextBlock Text="To start the game over press &quot;RESTART&quot;" TextWrapping="Wrap" TextAlignment="Center"/>
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="335" Y="-140"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <TextBox x:Name="TileSize" TextWrapping="Wrap" Text="16" Width="20" Height="20" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5" FontSize="12">
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="345" Y="-125"/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
+        <Label x:Name="TileSizeLabel" Content="Tile size:" Width="60" Height="30" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="310" Y="-125"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Button x:Name="ChangeTileSize" Content="GO" Width="25" Height="20" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Click="ChangeTileSize_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="370" Y="-125"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="BlueViolet" BorderBrush="DarkViolet" BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                TextElement.FontWeight="Bold"
+                TextElement.Foreground="White"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Violet"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkViolet"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+    </Grid>
+</Window>
